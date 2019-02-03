@@ -2,6 +2,4 @@
 Senior project
 
 # Important modue ( in cmd )
-pip install pyax12
-pip install pykinect
-pip install opencv-python
+pip install pyax12  pykinect  pencv-python
