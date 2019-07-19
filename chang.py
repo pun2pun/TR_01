@@ -21,6 +21,7 @@ def processImage_2():
     try:
 
         pic_raw = cv2.imread('data/FROM_kinect.jpg')
+        cv2.imwrite('data/raw.jpg',pic_raw)
 
         pic = pic_raw[150:440,70:570]
         cv2.imwrite('data/crop.jpg',pic)
@@ -31,6 +32,7 @@ def processImage_2():
         y = []
             
         gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+       
 
         edges = auto_canny(gray)
         cv2.imwrite('data/rescale.jpg',edges)  
@@ -77,11 +79,13 @@ def processImage_2():
 def video_handler_function(frame):
     try:
 
-        kernel = np.ones((5,5),np.uint8)
+        
         video = numpy.empty((480,640,4),numpy.uint8)
         frame.image.copy_bits(video.ctypes.data)
 
         image = video[150:400,85:570]
+        cv2.imwrite('data/FROM_kinect.jpg',image)
+      
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         blurred = cv2.GaussianBlur(gray, (5, 5), 0)
         thresh = cv2.threshold( blurred,175,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)[1]
@@ -102,10 +106,8 @@ def video_handler_function(frame):
         
             color = image[cY][cX]
             
-            if(color[2] > color[1]):
-                text_color = 'Red'
-            if(color[2] < color[1]):
-                text_color = 'Green'
+            if(color[2] > color[1]):                text_color = 'Red'
+            if(color[2] < color[1]):                text_color = 'Green'
 
             pos.append((cX,cY,text_color))
             cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
@@ -114,9 +116,10 @@ def video_handler_function(frame):
             
         
         cv2.imshow('KINECT Video Stream', video)
-        cv2.imwrite('data/FROM_kinect.jpg',image)
         
-
+        
+    
+        
     
     except:
         print('Get data from KINECT ERROR')
@@ -130,23 +133,31 @@ def getImage():
         kinect.video_stream.open(nui.ImageStreamType.Video, 2,nui.ImageResolution.Resolution640x480,nui.ImageType.color)
         cv2.namedWindow('KINECT Video Stream', cv2.WINDOW_AUTOSIZE)
 
-
+        time = 0
         while True:
             key = cv2.waitKey(1)
-            if key == ord(' '): 
+            print(time)
+            time += 1
+            
+            if key == ord(' ') or time == 500 : 
                 print(" Get Image -- Succesfully !!")
                 print(pos)
                 break
-
+        
+        
         kinect.close()
         cv2.destroyAllWindows()
-        return pos
+        
+        
+        
+        return pos 
 
     except:
         print(" In Chang ERROR function -- getImage")
 
 
 
+#-----------------------------------------------------------------------------------------------
 
 # ฟังก์ชั่ที่ใช้ปรับความละเอียดภาพ (ปกติใช้ 64x48 pixel)
 def rescale(frames,percent = 75):
@@ -243,26 +254,49 @@ def calculateDistance():
     except:
         print(" In Chang ERROR function -- calculateDistance")
 
-def whatYouSee():
+
+
+#-----------------------------------------------------------------------------------------------
+
+def video_handler_function_feedback(frame):
     try:
-        pic = cv2.imread('data/Test.jpg')
-        pic = cv2.cvtColor(pic,cv2.COLOR_BGR2RGB)
-        pic1 = cv2.imread('data/rescale.jpg')
-        pic1 = cv2.cvtColor(pic1,cv2.COLOR_BGR2RGB)
-        pic2 = cv2.imread('data/noise_rm.jpg')
-        pic3 = cv2.imread('data/pixel.jpg')        
-        plt.title("I am see")
-        plt.subplot(221)
-        plt.imshow(pic)
-        plt.subplot(222)
-        plt.imshow(pic1)
-        plt.subplot(223)
-        plt.imshow(pic2)
-        plt.subplot(224)
-        plt.imshow(pic3)
-        plt.show()
+        video = numpy.empty((480,640,4),numpy.uint8)
+        frame.image.copy_bits(video.ctypes.data)
+        image = video[150:400,85:570]
+        image = image[0:58 ,173:288]
+        
+
+      
+        
+        
+        cv2.imwrite('data/feed_back.jpg',image)
+   
+
+    
     except:
-        print(" In Chang ERROR function -- whatYouSee")
+        print('Get data from KINECT ERROR')
 
 
 
+
+
+
+def get_image_feedback():
+    status = True
+
+    try:
+        kinect = nui.Runtime()
+        kinect.video_frame_ready += video_handler_function_feedback
+        kinect.video_stream.open(nui.ImageStreamType.Video, 2,nui.ImageResolution.Resolution640x480,nui.ImageType.color)
+        
+        time.sleep(1)
+        kinect.close()
+
+        
+
+
+    except:
+        print(" In Chang ERROR function -- getImage")
+
+
+    return status

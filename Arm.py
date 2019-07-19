@@ -1,5 +1,20 @@
 from math import sin , cos ,radians,atan,sqrt,degrees,atan2
 from tqdm import tqdm
+import csv
+
+def create_data(x,y,z):
+	q1,q2,q3,q4,q5,q6 = 1,2,5,4,7,5	
+	row = [str(x), str(y),str(z),"   ",str(q1),str(q2),str(q3),str(q4),str(q5),str(q6)]
+
+	with open('positions.csv', 'a') as csvFile:
+		writer = csv.writer(csvFile)
+		writer.writerow(row)
+
+	csvFile.close()
+
+
+for i in range(20):
+	create_data(i,2,3)
 
 #/////////////////////////////////////////////////////////////////////////////
 #    This moduel is  calculate 	FORWARD KINEMATIC for use control Robot

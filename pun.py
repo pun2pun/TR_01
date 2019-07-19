@@ -63,3 +63,10 @@ class Control:
         robot = Connection(port=self.port, baudrate=self.bps)
         robot.goto(self.motor_6, p6, speed=self.speed, degrees=True)
         robot.close() 
+
+
+    def Rotate_hnad(self,p7):
+        robot = Connection(port=self.port, baudrate=self.bps)
+        robot.goto(self.motor_5, p7, speed=self.speed, degrees=True)
+        robot.close() 
+
