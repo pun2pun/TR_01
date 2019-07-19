@@ -1,8 +1,24 @@
-# TR_01
-Senior project
+ ## TR_01
+#####( A study and development of artificial intelligence system for industrial robot arm)
 
-##Important Modueles
+- Ai ( object classifier )
+-  Image processing
+-  Basic kinematic calculate
+- Feedback control
+- Robot 6 dof
+- Automate move to object
+- Design part robotic arm
+- Gui
 
-- pip install pykinect
-- pip install pyax12a
-- pip install opencv-python
+##Developer
+- Sarun Arneknoun
+- Wisarut Thanakun
+- Anutida Sombatlay
+
+Advisor : Dr.Thummaros Rugthum
+
+
+
+**Senior Project - Electrical and Electronic engineering**
+**Ubon ratchathani university**
+
